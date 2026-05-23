@@ -128,3 +128,55 @@
     @apply font-sans;
   }
 }
+/* ── Light mode theme overrides ── */
+:root:not(.dark) body {
+  background-color: #f8f8f8;
+  color: #111;
+}
+:root:not(.dark) header {
+  background-color: rgba(255,255,255,0.9) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+:root:not(.dark) .border-white\/\[0\.07\],
+:root:not(.dark) .border-white\/10,
+:root:not(.dark) .border-white\/8 {
+  border-color: rgba(0,0,0,0.08) !important;
+}
+:root:not(.dark) .bg-white\/\[0\.025\],
+:root:not(.dark) .bg-white\/\[0\.02\],
+:root:not(.dark) .bg-white\/\[0\.03\],
+:root:not(.dark) .bg-white\/\[0\.04\],
+:root:not(.dark) .bg-white\/5 {
+  background-color: rgba(0,0,0,0.03) !important;
+}
+:root:not(.dark) .text-white {
+  color: #111 !important;
+}
+:root:not(.dark) .text-white\/90,
+:root:not(.dark) .text-white\/85,
+:root:not(.dark) .text-white\/80,
+:root:not(.dark) .text-white\/75,
+:root:not(.dark) .text-white\/70 {
+  color: rgba(0,0,0,0.85) !important;
+}
+:root:not(.dark) .text-white\/60,
+:root:not(.dark) .text-white\/55,
+:root:not(.dark) .text-white\/50 {
+  color: rgba(0,0,0,0.6) !important;
+}
+:root:not(.dark) .text-white\/40,
+:root:not(.dark) .text-white\/35,
+:root:not(.dark) .text-white\/30,
+:root:not(.dark) .text-white\/25,
+:root:not(.dark) .text-white\/20 {
+  color: rgba(0,0,0,0.4) !important;
+}
+:root:not(.dark) input,
+:root:not(.dark) textarea {
+  color: #111 !important;
+  background-color: rgba(0,0,0,0.04) !important;
+}
+:root:not(.dark) .dark\:bg-black,
+:root:not(.dark) .dark\:bg-black\/80 {
+  background-color: #fff !important;
+}

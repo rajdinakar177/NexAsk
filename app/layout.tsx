@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "./components/Header";
-import Footer from "@/app/components/Footer";
-
 import getOrCreateDB from "./models/server/dbSetup";
 import getOrCreateStorage from "./models/server/storage.collection";
+import { Suspense } from "react";
+import PageLoader from "./components/PageLoader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,9 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={cn(inter.className, "min-h-screen dark:bg-black dark:text-white")}>
+        <Suspense>
+          <PageLoader />
+        </Suspense>
         <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );

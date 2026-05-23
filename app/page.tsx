@@ -399,10 +399,11 @@ export default async function HomePage({ searchParams }: HomeProps) {
                 <Link
                   key={t}
                   href={buildUrl({ tag: t, page: "1" })}
-                  className={`rounded-md border px-2 py-1 text-[11px] font-medium transition ${tag === t
-                    ? "border-orange-500/50 bg-orange-500/15 text-orange-400"
-                    : "border-white/10 bg-white/5 text-white/45 hover:border-orange-500/30 hover:text-orange-400"
-                    }`}
+                 className={`rounded-md border px-2 py-1 text-[11px] font-medium transition ${
+  tag === t
+    ? "border-orange-500/50 bg-orange-500/15 text-orange-400"
+    : "border-black/10 bg-black/5 text-black/60 dark:border-white/10 dark:bg-white/5 dark:text-white/45 hover:border-orange-500/30 hover:text-orange-400"
+}`}
                 >
                   {t}
                 </Link>
