@@ -77,7 +77,7 @@ export default function Header() {
             <IconFlame size={16} className="text-white" />
           </div>
           <span className="hidden text-sm sm:block">
-            River<span className="text-orange-500">flow</span>
+            Nex<span className="text-orange-500">Ask</span>
           </span>
         </Link>
 
