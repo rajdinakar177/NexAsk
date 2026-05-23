@@ -136,7 +136,8 @@ export const useAuthStore = create<IAuthStore>()(
             },
             async verifySession() {
                 try {
-                    const user = await account.get()
+
+                    const user = await account.get<UserPref>()
 
                     const [session, jwt] = await Promise.all([
                         account.getSession("current"),
@@ -150,11 +151,13 @@ export const useAuthStore = create<IAuthStore>()(
                     })
 
                 } catch (error) {
+
                     set({
                         user: null,
                         session: null,
                         jwt: null
                     })
+
                 }
             },
 
@@ -182,21 +185,26 @@ export const useAuthStore = create<IAuthStore>()(
         {
             name: "auth",
 
-           onRehydrateStorage() {
-    return async (state) => {
-        try {
-            await account.getSession("current")
-        } catch {
-            state?.set({
-                user: null,
-                session: null,
-                jwt: null
-            })
-        }
+            onRehydrateStorage() {
+                return async () => {
 
-        state?.setHydrated()
-    }
-}
+                    try {
+
+                        await account.getSession("current")
+
+                    } catch {
+
+                        useAuthStore.setState({
+                            user: null,
+                            session: null,
+                            jwt: null
+                        })
+
+                    }
+
+                    useAuthStore.getState().setHydrated()
+                }
+            }
         }
     )
 )
