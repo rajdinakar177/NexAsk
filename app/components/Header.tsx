@@ -14,6 +14,7 @@ import {
   IconPlus,
   IconSun,
   IconMoon,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 
 function useTheme() {
@@ -76,7 +77,7 @@ export default function Header() {
             <IconFlame size={16} className="text-white" />
           </div>
           <span className="hidden text-sm sm:block">
-            Nex<span className="text-orange-500">Ask</span>
+            River<span className="text-orange-500">flow</span>
           </span>
         </Link>
 
@@ -93,6 +94,15 @@ export default function Header() {
         </form>
 
         <div className="ml-auto flex items-center gap-2">
+
+          {/* About link */}
+          <Link
+            href="/about"
+            title="About"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition hover:border-orange-500/40 hover:text-orange-400"
+          >
+            <IconInfoCircle size={15} />
+          </Link>
 
           {/* Theme toggle */}
           <button
