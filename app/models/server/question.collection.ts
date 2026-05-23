@@ -95,23 +95,23 @@ export default async function createQuestionCollection() {
   console.log("Attributes available")
 
   // Create indexes
-  await Promise.all([
-    databases.createIndex(
-      db,
-      questionsCollection,
-      "title_index",
-      "fulltext",
-      ["title"]
-    ),
+await Promise.all([
+  databases.createIndex(
+    db,
+    questionsCollection,
+    "title_index",
+    "fulltext" as any,
+    ["title"]
+  ),
 
-    databases.createIndex(
-      db,
-      questionsCollection,
-      "content_index",
-      "fulltext",
-      ["content"]
-    ),
-  ])
+  databases.createIndex(
+    db,
+    questionsCollection,
+    "content_index",
+    "fulltext" as any,
+    ["content"]
+  ),
+]);
 
   console.log("Indexes created")
 }
