@@ -26,6 +26,38 @@ import VoteButtons from "@/app/components/VoteButtons";
 import AttachmentPreview from "@/app/questions/[questionId]/AttachmentPreview";
 import AnswerSection from "@/app/questions/[questionId]/AnswerSection";
 import env from "@/app/env";
+
+
+interface CommentType {
+  $id: string;
+  $createdAt: string;
+  content: string;
+  authorId: string;
+  authorName: string;
+}
+
+interface AnswerType {
+  $id: string;
+  $createdAt: string;
+  content: string;
+  authorId: string;
+  authorName: string;
+  authorReputation: number;
+  upvotes: number;
+  downvotes: number;
+  comments: CommentType[];
+}
+
+interface QuestionType {
+  $id: string;
+  $createdAt: string;
+  title: string;
+  content: string;
+  authorId: string;
+    tags?: string[];
+
+  attachmentId?: string;
+}
 function timeAgo(dateString: string): string {
   const date = new Date(dateString);
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
@@ -71,7 +103,10 @@ async function getVotes(type: "question" | "answer", typeId: string) {
   return { upvotes: up.total, downvotes: down.total };
 }
 
-async function getComments(type: "question" | "answer", typeId: string) {
+async function getComments(
+  type: "question" | "answer",
+  typeId: string
+): Promise<CommentType[]> {
   const res = await databases.listDocuments(db, commentCollection, [
     Query.equal("type", type),
     Query.equal("typeId", typeId),
@@ -82,7 +117,13 @@ async function getComments(type: "question" | "answer", typeId: string) {
   const enriched = await Promise.all(
     res.documents.map(async (c) => {
       const author = await users.get(c.authorId).catch(() => null);
-      return { ...c, authorName: author?.name ?? c.authorId.slice(0, 8) };
+      return {
+        $id: c.$id,
+        $createdAt: c.$createdAt,
+        content: c.content,
+        authorId: c.authorId,
+        authorName: author?.name ?? c.authorId.slice(0, 8),
+      };
     })
   );
   return enriched;
@@ -150,20 +191,24 @@ export default async function QuestionDetailPage({ params }: PageProps) {
   const { questionId } = await params;
 
   // ── Fetch question ──────────────────────────────────────────────────────
-  let question;
+ let question: QuestionType;
   try {
-    question = await databases.getDocument(db, questionsCollection, questionId);
+   question = await databases.getDocument(
+  db,
+  questionsCollection,
+  questionId
+) as unknown as QuestionType;
   } catch {
     notFound();
   }
 
   // ── Parallel data fetch ─────────────────────────────────────────────────
-  const [
-    questionVotes,
-    questionComments,
-    answersRes,
-    questionAuthor,
-  ] = await Promise.all([
+const [
+  questionVotes,
+  questionComments,
+  answersRes,
+  questionAuthor,
+]: [any, CommentType[], any, any] = await Promise.all([
     getVotes("question", questionId),
     getComments("question", questionId),
     databases.listDocuments(db, answerCollection, [
@@ -175,8 +220,8 @@ export default async function QuestionDetailPage({ params }: PageProps) {
   ]);
 
   // ── Enrich answers ──────────────────────────────────────────────────────
-  const answers = await Promise.all(
-    answersRes.documents.map(async (ans) => {
+const answers: AnswerType[] = await Promise.all(
+    answersRes.documents.map(async (ans: any) => {
       const [votes, comments, author] = await Promise.all([
         getVotes("answer", ans.$id),
         getComments("answer", ans.$id),
@@ -196,7 +241,7 @@ export default async function QuestionDetailPage({ params }: PageProps) {
   const tags: string[] = question.tags ?? [];
   const hasAttachment = Boolean(question.attachmentId);
   const attachmentUrl = hasAttachment
-    ? getAttachmentUrl(question.attachmentId)
+    ? getAttachmentUrl(question.attachmentId as string)
     : null;
 
   // Serialise for client components
@@ -209,7 +254,7 @@ export default async function QuestionDetailPage({ params }: PageProps) {
     authorReputation: a.authorReputation,
     upvotes: a.upvotes,
     downvotes: a.downvotes,
-    comments: a.comments.map((c) => ({
+    comments: a.comments.map((c: CommentType) => ({
       $id: c.$id,
       $createdAt: c.$createdAt,
       content: c.content as string,
@@ -228,7 +273,7 @@ export default async function QuestionDetailPage({ params }: PageProps) {
     attachmentId: question.attachmentId as string | undefined,
   };
 
-  const plainQuestionComments = questionComments.map((c) => ({
+  const plainQuestionComments = questionComments.map((c: CommentType) => ({
     $id: c.$id,
     $createdAt: c.$createdAt,
     content: c.content as string,
