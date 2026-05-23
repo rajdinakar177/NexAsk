@@ -31,7 +31,13 @@ const POPULAR_TAGS = [
   "api",
   "git",
 ];
-
+interface QuestionDocument extends Models.Document {
+  authorId: string;
+  title: string;
+  content: string;
+  tags: string[];
+  attachmentId?: string | null;
+}
 const PAGE_SIZE = 10;
 
 async function getQuestions(
@@ -177,13 +183,14 @@ try {
 }
 
   const enriched = questions
-    ? await Promise.all(
-      questions.documents.map(async (q) => {
+  ? await Promise.all(
+      (questions.documents as QuestionDocument[]).map(async (q) => {
         const [totalAnswers, totalVotes, authorInfo] = await Promise.all([
           getAnswerCount(q.$id),
           getVoteScore(q.$id),
           users.get(q.authorId).catch(() => null),
         ]);
+
         return {
           question: q,
           totalAnswers,
@@ -192,7 +199,7 @@ try {
         };
       })
     )
-    : [];
+  : [];
 
   const totalPages = questions ? Math.ceil(questions.total / PAGE_SIZE) : 1;
 
