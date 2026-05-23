@@ -16,8 +16,8 @@ interface QuestionCardProps {
   question: {
     $id: string;
     $createdAt: string;
-    attachmentId?: string;
-    title: string;
+    attachmentId?: string | null;
+     title: string;
     content: string;
     tags?: string[];
     authorId?: string;
@@ -73,13 +73,12 @@ export default function QuestionCard({
             {/* Vote score */}
             <div className="flex flex-col items-center gap-0.5 min-w-[2.5rem]">
               <span
-                className={`text-base font-bold tabular-nums leading-none ${
-                  totalVotes > 0
+                className={`text-base font-bold tabular-nums leading-none ${totalVotes > 0
                     ? "text-orange-400"
                     : totalVotes < 0
-                    ? "text-red-400/80"
-                    : "text-white/25"
-                }`}
+                      ? "text-red-400/80"
+                      : "text-white/25"
+                  }`}
               >
                 {totalVotes > 0 ? `+${totalVotes}` : totalVotes}
               </span>
@@ -90,23 +89,20 @@ export default function QuestionCard({
 
             {/* Answer count */}
             <div
-              className={`flex flex-col items-center gap-0.5 rounded-lg px-2.5 py-1.5 ${
-                totalAnswers > 0
+              className={`flex flex-col items-center gap-0.5 rounded-lg px-2.5 py-1.5 ${totalAnswers > 0
                   ? "bg-emerald-500/10 ring-1 ring-emerald-500/20"
                   : "ring-1 ring-white/5"
-              }`}
+                }`}
             >
               <span
-                className={`text-sm font-bold tabular-nums leading-none ${
-                  totalAnswers > 0 ? "text-emerald-400" : "text-white/25"
-                }`}
+                className={`text-sm font-bold tabular-nums leading-none ${totalAnswers > 0 ? "text-emerald-400" : "text-white/25"
+                  }`}
               >
                 {totalAnswers}
               </span>
               <span
-                className={`text-[9px] uppercase tracking-widest ${
-                  totalAnswers > 0 ? "text-emerald-400/50" : "text-white/20"
-                }`}
+                className={`text-[9px] uppercase tracking-widest ${totalAnswers > 0 ? "text-emerald-400/50" : "text-white/20"
+                  }`}
               >
                 ans
               </span>

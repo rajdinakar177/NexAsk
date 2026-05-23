@@ -167,23 +167,23 @@ export default async function HomePage({ searchParams }: HomeProps) {
   const sort = params.sort ?? "newest";
   const page = Math.max(1, parseInt(params.page ?? "1", 10));
 
- let questions: Models.DocumentList<Models.Document> | null = null;
-let error = "";
-let totalAnswers = 0;
-let totalUsers = 0;
+  let questions: Models.DocumentList<Models.Document> | null = null;
+  let error = "";
+  let totalAnswers = 0;
+  let totalUsers = 0;
 
-try {
-  [questions, totalAnswers, totalUsers] = await Promise.all([
-    getQuestions(search, tag, sort, page),
-    getTotalAnswers(),
-    getTotalUsers(),
-  ]);
-} catch (e: any) {
-  error = e?.message ?? "Failed to load questions";
-}
+  try {
+    [questions, totalAnswers, totalUsers] = await Promise.all([
+      getQuestions(search, tag, sort, page),
+      getTotalAnswers(),
+      getTotalUsers(),
+    ]);
+  } catch (e: any) {
+    error = e?.message ?? "Failed to load questions";
+  }
 
   const enriched = questions
-  ? await Promise.all(
+    ? await Promise.all(
       (questions.documents as QuestionDocument[]).map(async (q) => {
         const [totalAnswers, totalVotes, authorInfo] = await Promise.all([
           getAnswerCount(q.$id),
@@ -199,7 +199,7 @@ try {
         };
       })
     )
-  : [];
+    : [];
 
   const totalPages = questions ? Math.ceil(questions.total / PAGE_SIZE) : 1;
 
@@ -259,8 +259,8 @@ try {
                 key={key}
                 href={buildUrl({ sort: key, page: "1" })}
                 className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition ${sort === key
-                    ? "bg-orange-500 text-white"
-                    : "text-white/40 hover:bg-white/5 hover:text-white/70"
+                  ? "bg-orange-500 text-white"
+                  : "text-white/40 hover:bg-white/5 hover:text-white/70"
                   }`}
               >
                 <Icon size={13} />
@@ -365,8 +365,8 @@ try {
                       key={pageNum}
                       href={buildUrl({ page: String(pageNum) })}
                       className={`flex h-7 w-7 items-center justify-center rounded-lg text-xs transition ${pageNum === page
-                          ? "bg-orange-500 font-semibold text-white"
-                          : "border border-white/10 text-white/40 hover:border-white/20 hover:text-white/70"
+                        ? "bg-orange-500 font-semibold text-white"
+                        : "border border-white/10 text-white/40 hover:border-white/20 hover:text-white/70"
                         }`}
                     >
                       {pageNum}
@@ -400,8 +400,8 @@ try {
                   key={t}
                   href={buildUrl({ tag: t, page: "1" })}
                   className={`rounded-md border px-2 py-1 text-[11px] font-medium transition ${tag === t
-                      ? "border-orange-500/50 bg-orange-500/15 text-orange-400"
-                      : "border-white/10 bg-white/5 text-white/45 hover:border-orange-500/30 hover:text-orange-400"
+                    ? "border-orange-500/50 bg-orange-500/15 text-orange-400"
+                    : "border-white/10 bg-white/5 text-white/45 hover:border-orange-500/30 hover:text-orange-400"
                     }`}
                 >
                   {t}
@@ -422,8 +422,8 @@ try {
                   value: questions?.total ?? 0,
                   color: "text-orange-400",
                 },
-             { label: "Answers", value: totalAnswers, color: "text-emerald-400" },
-{ label: "Users",   value: totalUsers,   color: "text-blue-400" },
+                { label: "Answers", value: totalAnswers, color: "text-emerald-400" },
+                { label: "Users", value: totalUsers, color: "text-blue-400" },
               ].map(({ label, value, color }) => (
                 <div key={label} className="flex items-center justify-between">
                   <span className="text-xs text-white/40">{label}</span>
